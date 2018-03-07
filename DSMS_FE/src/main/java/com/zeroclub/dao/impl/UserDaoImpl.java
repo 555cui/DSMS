@@ -1,0 +1,11 @@
+package com.zeroclub.dao.impl;
+
+import com.zeroclub.dao.UserDao;
+import com.zeroclub.entity.User;
+
+public class UserDaoImpl extends DaoBaseImpl<User> implements UserDao {
+    public UserDaoImpl(){
+        super();
+        setNs("User");
+    }
+}
