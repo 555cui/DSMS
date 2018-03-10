@@ -7,7 +7,6 @@ public class Role {
 
     private String name;
     private int level;
-    private String type;
     private String description;
 
     private String operator;
@@ -36,14 +35,6 @@ public class Role {
 
     public void setLevel(int level) {
         this.level = level;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getDescription() {

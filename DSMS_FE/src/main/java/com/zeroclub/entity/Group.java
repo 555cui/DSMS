@@ -6,7 +6,6 @@ public class Group {
     private String id;
 
     private String name;
-    private Role role;
     private String description;
 
     private String operatior;
@@ -27,14 +26,6 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public String getDescription() {

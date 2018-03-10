@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeroclub.dao.RoleDao">
+    <insert id="insert">
+
+    </insert>
+    <select id="getOne">
+
+    </select>
+    <select id="getList">
+
+    </select>
+    <update id="update">
+
+    </update>
+    <delete id="deleteOne">
+
+    </delete>
+    <delete id="deleteList">
+
+    </delete>
+</mapper>

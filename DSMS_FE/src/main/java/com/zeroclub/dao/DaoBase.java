@@ -8,7 +8,7 @@ public interface DaoBase<T> {
     void insert(T t);
 
     //delete entitys
-    void deleteOne(String id);
+    void deleteOne(T t);
     void deleteList(String[] ids);
 
     //select entitys

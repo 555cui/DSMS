@@ -10,10 +10,10 @@ public interface UserService {
     boolean checkRole(User user, String action);
     boolean isExist(User user);
 
-    List<User> getUserPage(User user, int base,int size);
+    User getOne(User user);
     List<User> filter(Map<String, Object> param);
 
-    String save(User user);
-    String deleteOne(String id);
+    User save(User user);
+    String deleteOne(User user);
     String deleteList(String[] ids);
 }

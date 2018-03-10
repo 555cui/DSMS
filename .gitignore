@@ -7,3 +7,5 @@
 out
 gen
 .idea/
+/DSMS_FE/target/
+DSMS_FE/logs/

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeroclub.dao.UserDao">
+    <resultMap id="userMap" type="com.zeroclub.entity.User">
+        <id property="id" column="id" javaType="java.lang.String" />
+        <result property="name" column="name" javaType="java.lang.String" />
+        <result property="password" column="password" javaType="java.lang.String" />
+        <result property="operator" column="operator" javaType="java.lang.String" />
+        <result property="createTime" column="createTime" javaType="java.util.Date" />
+        <result property="updateTime" column="updateTime" javaType="java.util.Date"/>
+    </resultMap>
+
+    <select id="getOne" parameterType="com.zeroclub.entity.User" resultMap="userMap" >
+        select * from table_user
+        where 1=1
+        <if test="id != null and id != ''" >
+            and id = #{id}
+        </if>
+        <if test="name != null and id != ''" >
+            and name = #{name}
+        </if>
+        <if test="password !=null and password !=''">
+            and password = #{password}
+        </if>
+    </select>
+
+    <select id="getList" parameterType="java.util.Map" resultMap="userMap" >
+        select * from table_user
+        where 1=1
+        <if test="create != null">
+            <if test="create.start != null">
+                and createTime <![CDATA[>=]]> #{create.start}
+            </if>
+            <if test="create.end !=null">
+                and createTime <![CDATA[<]]> #{create.end}
+            </if>
+        </if>
+        <if test="update != null">
+            <if test="update.start != null">
+                and updateTime <![CDATA[>=]]> #{update.start}
+            </if>
+            <if test="update.end !=null">
+                and updateTime <![CDATA[<]]> #{update.end}
+            </if>
+        </if>
+        <if test="data != null">
+            <if test="data.id != null and data.id != ''">
+                and id = #{data.id}
+            </if>
+            <if test="data.name != null and data.name != ''">
+                and name = #{data.name}
+            </if>
+            <if test="data.password !=null and data.password !=''">
+                and password = #{data.password}
+            </if>
+        </if>
+        <if test="page != null">
+            limit #{page.base}, #{page.size}
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.zeroclub.entity.User" >
+        update table_user
+        <set>
+            <if test="name !=null and name !=''">
+                name = #{name},
+            </if>
+            <if test="password != null and password !=''">
+                password = #{password},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="com.zeroclub.entity.User" >
+        insert into table_user(id, name, password)
+        values(#{id}, #{name}, #{password})
+    </insert>
+
+    <delete id="deleteOne" parameterType="com.zeroclub.entity.User" >
+        delete from table_user
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteList">
+        delete from table_user
+        where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

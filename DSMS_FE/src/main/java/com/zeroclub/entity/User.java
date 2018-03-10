@@ -7,7 +7,6 @@ public class User {
 
     private String name;
     private String password;
-    private Group group;
 
     public String getId() {
         return id;
@@ -33,22 +32,6 @@ public class User {
         this.password = password;
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
-    public String getOperator() {
-        return Operator;
-    }
-
-    public void setOperator(String operator) {
-        Operator = operator;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -65,7 +48,6 @@ public class User {
         this.updateTime = updateTime;
     }
 
-    private String Operator;
     private Date createTime;
     private Date updateTime;
 }
