@@ -2,17 +2,16 @@ package com.zeroclub.controller;
 
 import com.zeroclub.entity.User;
 import com.zeroclub.service.UserService;
+import com.zeroclub.util.CashService;
 import com.zeroclub.util.ReturnMap;
 import com.zeroclub.util.UUIDTools;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
@@ -24,76 +23,95 @@ public class UserController {
     private UserService userService;
     @Resource
     private UUIDTools uuidTools;
+    @Resource
+    private CashService cash;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String login(@PathVariable("id") String userId, ModelMap model){
-        User user = new User();
-        user.setId(userId);
+    private Logger logger = Logger.getLogger("com.zeroclub.contorller.UserController");
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public Map login(@RequestBody User user, HttpServletResponse response){
+        logger.info(user.getName());
+        logger.info(user.getPassword());
         user = userService.getOne(user);
-        if (user !=null){
-            model.addAllAttributes(returnMap.getSuccessReturn(user));
+        if (user != null) {
+            String id = user.getId();
+            String token = cash.set(id);
+            Cookie cookie = new Cookie("token", token);
+            cookie.setPath("/user");
+            response.addCookie(cookie);
+            return returnMap.getSuccessReturn(id);
         }
-        model.addAllAttributes(returnMap.getFalieReturn(1, "user is not exist", null));
-        return "index";
+        return returnMap.getFalieReturn(1,"user name or password error",null);
     }
 
-    @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public String checkPassword(@RequestParam Map<String, Object> param, ModelMap model){
-        User user = new User();
-        user.setName((String)param.get("name"));
-        user.setPassword((String)param.get("password"));
-        if (userService.checkPassword(user)) {
-            user = userService.getOne(user);
-            model.addAllAttributes(returnMap.getSuccessReturn(user.getId()));
-        }
-        else model.addAllAttributes(returnMap.getFalieReturn(1,"login faile",null));
-        return "error";
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public Map register(@RequestBody User user, HttpServletResponse response){
+        user = userService.save(user);
+        String token = cash.set(user.getId());
+        Cookie cookie = new Cookie("token", token);
+        cookie.setPath("/user");
+        response.addCookie(cookie);
+        return returnMap.getSuccessReturn(user.getId());
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Map registUser(User user){
+    @RequestMapping(value = "/checkName", method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkUserName(@RequestBody User user){
         if (!userService.isExist(user)){
-            user.setId(uuidTools.getUUID());
-            user = userService.save(user);
-            return returnMap.getSuccessReturn(user);
+            return returnMap.getSuccessReturn("name not use");
         }
-        return returnMap.getFalieReturn(2, "user is exist", null);
+        return returnMap.getFalieReturn(2,"name is exist", null);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public String updateUser(@PathVariable("id") String userId, @RequestParam User user, ModelMap model){
-        user.setId(userId);
-        if (userService.isExist(user)){
-            userService.save(user);
-            model.addAllAttributes(returnMap.getSuccessReturn(null));
+    @RequestMapping(value = "/checkEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkEmail(@RequestBody User user){
+        if (!userService.isExist(user)){
+            return returnMap.getSuccessReturn("email not use");
         }
-        model.addAllAttributes(returnMap.getFalieReturn(1,"user is not exist", null));
-        return "error";
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getList(@RequestParam Map<String, Object> param, ModelMap model){
-        List<User> users = userService.filter(param);
-        model.addAllAttributes(returnMap.getSuccessReturn(users));
-        return "error";
+        return returnMap.getFalieReturn(3,"email is exist", null);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public Map deleteUser(@PathVariable("id") String userId){
-        User user = new User();
-        user.setId(userId);
-        if (userService.isExist(user)){
-            userService.deleteOne(user);
-            return returnMap.getSuccessReturn(null);
-        }
-        return returnMap.getFalieReturn(1, "user is not exist", null);
+    @ResponseBody
+    public Map logout(@PathVariable("id") String id){
+        cash.remove(id);
+        return returnMap.getSuccessReturn("success");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public Map deleteList(String[] ids) {
-        if (userService.deleteList(ids).equals("success")) {
-            return returnMap.getSuccessReturn(null);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map gerUserInfo(
+            @PathVariable("id") String userId,
+            @CookieValue(value="token", required=false) String token
+    ){
+        int code = cash.check(userId, token);
+        if(code != 0){
+            return returnMap.getFalieReturn(code,"user logout", null);
         }
-        return returnMap.getFalieReturn(3, "some errors", null);
+        User user = userService.getById(userId);
+        user.setPassword("");
+        return returnMap.getSuccessReturn(user);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseBody
+    public Map updateUser(
+            @PathVariable("id") String userId,
+            @CookieValue(value="token", required=false) String token,
+            User user
+    ){
+        int code = cash.check(userId, token);
+        if(code != 0){
+            return returnMap.getFalieReturn(code,"user logout", null);
+        }
+        if(userService.getById(userId)==null){
+            return returnMap.getFalieReturn(2, "user is not exist", null);
+        }
+        user.setId(userId);
+        userService.save(user);
+        return returnMap.getSuccessReturn("update success");
     }
 }

@@ -11,6 +11,7 @@ public interface UserService {
     boolean isExist(User user);
 
     User getOne(User user);
+    User getById(String id);
     List<User> filter(Map<String, Object> param);
 
     User save(User user);

@@ -6,23 +6,38 @@
         <id property="id" column="id" javaType="java.lang.String" />
         <result property="name" column="name" javaType="java.lang.String" />
         <result property="password" column="password" javaType="java.lang.String" />
-        <result property="operator" column="operator" javaType="java.lang.String" />
+        <result property="email" column="email" javaType="java.lang.String" />
         <result property="createTime" column="createTime" javaType="java.util.Date" />
         <result property="updateTime" column="updateTime" javaType="java.util.Date"/>
+        <association property="group" javaType="com.zeroclub.entity.Group">
+            <id property="id" column="id" />
+            <result property="name" column="name" />
+            <result property="description" column="description" />
+            <result property="createTime" column="createTime" javaType="java.util.Date" />
+            <result property="updateTime" column="updateTime" javaType="java.util.Date" />
+        </association>
     </resultMap>
 
     <select id="getOne" parameterType="com.zeroclub.entity.User" resultMap="userMap" >
-        select * from table_user
-        where 1=1
+        select u.*, g.name from table_user u, table_group g
+        where u.groupId = g.id
         <if test="id != null and id != ''" >
-            and id = #{id}
+            and u.id = #{id}
         </if>
         <if test="name != null and id != ''" >
-            and name = #{name}
+            and u.name = #{name}
         </if>
         <if test="password !=null and password !=''">
-            and password = #{password}
+            and u.password = #{password}
         </if>
+        <if test="email != null and email !='' ">
+            and u.email = #{email}
+        </if>
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="userMap">
+        select u.* g.name from table_user u, table_group g
+        where u.groupId = g.id and u.id = #{id}
     </select>
 
     <select id="getList" parameterType="java.util.Map" resultMap="userMap" >
@@ -54,6 +69,9 @@
             <if test="data.password !=null and data.password !=''">
                 and password = #{data.password}
             </if>
+            <if test="data.email !=null and data.email !=''">
+                and email = #{data.email}
+            </if>
         </if>
         <if test="page != null">
             limit #{page.base}, #{page.size}
@@ -69,13 +87,16 @@
             <if test="password != null and password !=''">
                 password = #{password},
             </if>
+            <if test="email !=null and email !=''">
+                email = #{email},
+            </if>
         </set>
         where id = #{id}
     </update>
 
     <insert id="insert" parameterType="com.zeroclub.entity.User" >
-        insert into table_user(id, name, password)
-        values(#{id}, #{name}, #{password})
+        insert into table_user(id, name, password, email)
+        values(#{id}, #{name}, #{password}, #{email})
     </insert>
 
     <delete id="deleteOne" parameterType="com.zeroclub.entity.User" >

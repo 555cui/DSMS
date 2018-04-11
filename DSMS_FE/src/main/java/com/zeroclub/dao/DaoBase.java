@@ -13,6 +13,7 @@ public interface DaoBase<T> {
 
     //select entitys
     T getOne(T t);
+    T getById(String id);
     List<T> getList(Map<String, Object> param);
 
     //update a entity

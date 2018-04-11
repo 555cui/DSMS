@@ -9,7 +9,6 @@ public class Role {
     private int level;
     private String description;
 
-    private String operator;
     private Date createTime;
     private Date updateTime;
 
@@ -43,14 +42,6 @@ public class Role {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public void setOperator(String operator) {
-        this.operator = operator;
     }
 
     public Date getCreateTime() {

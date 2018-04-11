@@ -17,8 +17,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UUIDTools uuidTools;
     public boolean checkPassword(User user) {
-        if (userDao.getOne(user) != null) return true;
-        return false;
+        return userDao.getOne(user) != null;
     }
 
     public boolean checkRole(User user, String action) {
@@ -26,12 +25,15 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean isExist(User user) {
-        if (userDao.getOne(user) != null) return true;
-        return false;
+        return userDao.getOne(user) != null;
     }
 
     public User getOne(User user) {
         return userDao.getOne(user);
+    }
+
+    public User getById(String id) {
+        return userDao.getById(id);
     }
 
     public List<User> filter(Map<String, Object> param) {

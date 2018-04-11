@@ -8,7 +8,6 @@ public class Group {
     private String name;
     private String description;
 
-    private String operatior;
     private Date createTime;
     private Date updateTime;
 
@@ -34,14 +33,6 @@ public class Group {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getOperatior() {
-        return operatior;
-    }
-
-    public void setOperatior(String operatior) {
-        this.operatior = operatior;
     }
 
     public Date getCreateTime() {

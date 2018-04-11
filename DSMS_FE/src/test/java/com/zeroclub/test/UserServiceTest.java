@@ -1,6 +1,7 @@
 package com.zeroclub.test;
 
 import com.alibaba.fastjson.JSON;
+import com.zeroclub.entity.Group;
 import com.zeroclub.entity.User;
 import com.zeroclub.service.UserService;
 import com.zeroclub.util.ReturnMap;
@@ -42,14 +43,9 @@ public class UserServiceTest extends BaseTest{
     @Rollback()
     public void testSave(){
         User user = new User();
-        user.setName("su");
-        user.setPassword("su5501628");
-        userService.save(user);
-
-        user = new User();
-        user.setName("root");
-        user = userService.getOne(user);
-        user.setPassword("aaaa");
+        user.setName("cui");
+        user.setPassword("cui5501628");
+        user.setEmail("cuijingchao0@126.com");
         userService.save(user);
     }
 

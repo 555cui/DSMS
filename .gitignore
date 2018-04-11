@@ -1,11 +1,18 @@
-# Created by .ignore support plugin (hsz.mobi)
-### Example user template template
-### Example user template
+.DS_Store
+node_modules
+dist
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# IntelliJ project files
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
 *.iml
-out
-gen
-.idea/
-/DSMS_FE/target/
-DSMS_FE/logs/
+/DSMS_FE/logs
+/DSMS_FE/target

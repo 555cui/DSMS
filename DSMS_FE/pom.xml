@@ -126,6 +126,12 @@
       <version>${slf4j.version}</version>
     </dependency>
     <!-- log end -->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>provided</scope>
+    </dependency>
     <!-- 上传组件包 -->
     <dependency>
       <groupId>commons-fileupload</groupId>
