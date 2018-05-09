@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeroclub.dao.TemplateGroupDao">
+    <resultMap id="result" type="com.zeroclub.entity.TemplateGroup">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+        <association property="user" column="userId" select="com.zeroclub.dao.UserDao.getById"/>
+        <collection property="template" column="id" select="com.zeroclub.dao.TemplateDao.getByGroup"/>
+    </resultMap>
+    <resultMap id="simple" type="com.zeroclub.entity.TemplateGroup">
+        <id column="id" property="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <select id="getSimple" resultMap="simple">
+        select * from table_template_group
+        where id = #{id}
+    </select>
+    <select id="getOne" resultMap="result">
+        select id, name, userId from table_template_group
+        where 1=1
+        <if test="id != null and id != ''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </select>
+    <select id="getById" resultMap="result">
+        select id, name, userId from table_template_group
+        where id = #{id}
+    </select>
+    <select id="getList" resultMap="result">
+        select id, name, userId from table_template_group
+        where 1=1
+        <if test="name !=null and name !=''">
+            and name = #{name}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+        order by createTime
+    </select>
+
+    <insert id="insert">
+        insert into table_template_group(id, name, userId)
+        values(#{id},#{name},#{user.id})
+    </insert>
+    <update id="update">
+        update table_template_group
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+        </set>
+        where id =#{id}
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </update>
+    <delete id="delete">
+        delete from table_template_group
+        where id = #{id} and name != 'default'
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </delete>
+    <delete id="deleteList">
+        delete from table_template_group
+        where id in
+        <foreach collection="array" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

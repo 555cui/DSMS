@@ -16,3 +16,4 @@ yarn-error.log*
 *.iml
 /DSMS_FE/logs
 /DSMS_FE/target
+out

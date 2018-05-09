@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeroclub.dao.ScheduleDao">
+    <resultMap id="simpleSchedule" type="com.zeroclub.entity.Schedule">
+        <id column="id" property="id"/>
+    </resultMap>
+    <resultMap id="schedule" type="com.zeroclub.entity.Schedule">
+        <id column="id" property="id"/>
+
+        <result column="startDate" property="startDate"/>
+        <result column="endDate" property="endDate"/>
+        <result column="week" property="week"/>
+        <result column="type" property="type"/>
+
+        <association property="device" column="deviceId" select="com.zeroclub.dao.DeviceDao.getById"/>
+        <association property="deviceGroup" column="deviceGroupId" select="com.zeroclub.dao.DeviceGroupDao.getById"/>
+
+        <association property="user" column="user" select="com.zeroclub.dao.UserDao.getById"/>
+
+        <collection property="program" column="id" select="com.zeroclub.dao.ProgramDao.getByScheduleId"/>
+    </resultMap>
+
+    <select id="getById" resultMap="schedule">
+        select * from table_schedule
+        where id = #{id}
+    </select>
+    <select id="getList" resultMap="simpleSchedule">
+        select id from table_schedule
+        where 1=1
+        <if test="device!=null">
+            and (0=1
+            <if test="device.id!=null">
+                or deviceId = #{device.id}
+            </if>
+            <if test="device.group!=null">
+                or deviceGroupId = #{device.group.id}
+            </if>
+            )
+        </if>
+        and
+        (
+            (#{startDate} &lt;= startDate and #{endDate} &gt;= endDate) or
+            (#{startDate} &gt;= startDate and #{startDate} &lt;= endDate) or
+            (#{endDate} &gt;= startDate and #{endDate} &lt;= endDate)
+        )
+        and (week &amp; #{week}) &gt; 0
+        <if test="program!=null">
+            <foreach collection="program" item="item">
+                and id in (
+                    select scheduleId from table_schedule_program
+                    where (#{item.startTime} &lt;= startTime and #{item.endTime} &gt;= endTime) or
+                    (#{item.startTime} &gt;= startTime and #{item.startTime} &lt;= endTime) or
+                    (#{item.endTime} &gt;= startTime and #{item.endTime} &lt;= endTime)
+                )
+            </foreach>
+        </if>
+    </select>
+    <insert id="insert">
+        insert into table_schedule(id, userId, deviceId, deviceGroupId, startDate, endDate, week)
+        values(#{id}, #{user.id}, #{device.id}, #{deviceGroup.id}, #{startDate}, #{endDate}, #{week})
+    </insert>
+    <delete id="delete">
+        delete from table_schedule
+        where id=#{id}
+        <if test="user!=null">
+            <if test="user.id!=null and user.id!=''">
+                userId = #{userId}
+            </if>
+        </if>
+    </delete>
+    <update id="update">
+        update table_schedule
+        <set>
+            <if test="startDate!=null">
+                startDate= #{startDate},
+            </if>
+            <if test="endDate!=null">
+                endDate=#{endDate},
+            </if>
+            <if test="week != null">
+                <if test="week>0">
+                    week = #{week}
+                </if>
+            </if>
+        </set>
+        where id =#{id}
+        <if test="user!=null">
+            <if test="user.id!=null and user.id!=''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </update>
+</mapper>

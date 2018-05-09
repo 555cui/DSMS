@@ -24,8 +24,8 @@ public class DaoBaseImpl<T> extends SqlSessionDaoSupport implements DaoBase<T> {
         this.getSqlSession().insert("com.zeroclub.dao."+ns+"Dao.insert", t);
     }
 
-    public void deleteOne(T t) {
-        this.getSqlSession().delete("com.zeroclub.dao."+ns+"Dao.deleteOne", t);
+    public void delete(String id) {
+        this.getSqlSession().delete("com.zeroclub.dao."+ns+"Dao.delete", id);
     }
 
     public void deleteList(String[] ids) {
@@ -40,10 +40,9 @@ public class DaoBaseImpl<T> extends SqlSessionDaoSupport implements DaoBase<T> {
         return this.getSqlSession().selectOne("com.zeroclub.dao."+ns+"Dao.getById", id);
     }
 
-    public List<T> getList(Map<String, Object> param) {
-        return this.getSqlSession().selectList("com.zeroclub.dao."+ns+"Dao.getList", param);
+    public List<T> getList(T t) {
+        return this.getSqlSession().selectList("com.zeroclub.dao."+ns+"Dao.getList", t);
     }
-
     public void update(T t) {
         this.getSqlSession().update("com.zeroclub.dao"+ns+"Dao.update", t);
     }

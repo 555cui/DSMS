@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeroclub.dao.MediaDao">
+    <resultMap id="mediaMap" type="com.zeroclub.entity.Media">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="_type" column="_type"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="etcData" column="etcData"/>
+        <result property="url" column="url"/>
+        <result property="imageUrl" column="imageUrl"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <association property="user" column="userId" select="com.zeroclub.dao.UserDao.getById"/>
+        <collection property="group" column="id" ofType="com.zeroclub.entity.Media" select="selectMediaByGroupId"/>
+    </resultMap>
+
+    <resultMap id="simpleMap" type="com.zeroclub.entity.Media">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="type" column="type"/>
+        <result property="_type" column="_type"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="etcData" column="etcData"/>
+        <result property="url" column="url"/>
+        <result property="imageUrl" column="imageUrl"/>
+    </resultMap>
+
+    <select id="getList" parameterType="com.zeroclub.entity.Media" resultMap="mediaMap">
+        select * from table_media
+        where 1=1
+        <if test="type != null and type != ''">
+            and type = #{type}
+        </if>
+        <if test="_type != null and _type != ''">
+            and _type = #{_type}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </select>
+
+    <select id="getOne" parameterType="com.zeroclub.entity.Media" resultMap="mediaMap">
+        select * from table_media
+        where 1=1
+        <if test="id != null and id != ''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="type != null and type != ''">
+            and type = #{type}
+        </if>
+        <if test="_type != null and _type != ''">
+            and _type = #{_type}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="mediaMap">
+        select * from table_media
+        where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.zeroclub.entity.Media">
+        insert into table_media(id, name, type, _type, userId, width, height, etcData, url, imageUrl)
+        values (#{id}, #{name}, #{type}, #{_type}, #{user.id}, #{width}, #{height},
+        #{etcData}, #{url}, #{imageUrl})
+    </insert>
+
+    <update id="update" parameterType="com.zeroclub.entity.Media">
+        update table_media
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="etcData != null">
+                etcData = #{etcData},
+            </if>
+            <if test="type != null">
+                <if test="type == 'text' or type == 'group'">
+                    <if test="width != null">
+                        width = #{width},
+                    </if>
+                    <if test="height != null">
+                        height = #{height},
+                    </if>
+                    <if test="url !=null and url != ''">
+                        url = #{url},
+                    </if>
+                </if>
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from table_media
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteList">
+        delete from table_media
+        where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectMediaByGroupId" parameterType="java.lang.String" resultMap="simpleMap">
+        select * from table_media
+        where id in (
+            select mediaId from table_media_group
+            where id = #{id}
+            order by mediaIndex
+        )
+    </select>
+
+    <delete id="deleteGroup" parameterType="java.lang.String">
+        delete from table_media_group
+        where id = #{id}
+    </delete>
+
+    <insert id="insertGroup" parameterType="com.zeroclub.entity.Media">
+        insert into table_media_group(id, mediaId, mediaIndex) values
+        <foreach collection="group" open="" close="" separator="," item="media" index="i">
+            (#{id}, #{media.id}, #{i})
+        </foreach>
+    </insert>
+</mapper>

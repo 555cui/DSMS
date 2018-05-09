@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDaoImpl extends DaoBaseImpl<User> implements UserDao {
     public UserDaoImpl(){
-        super();
         setNs("User");
     }
 }

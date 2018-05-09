@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeroclub.dao.ProgramDao">
+    <resultMap id="simpleProgram" type="com.zeroclub.entity.Program">
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <association property="template" column="templateId" select="com.zeroclub.dao.TemplateDao.getById"/>
+    </resultMap>
+    <resultMap id="program" type="com.zeroclub.entity.Program">
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <association property="template" column="templateId" select="com.zeroclub.dao.TemplateDao.getById"/>
+        <association property="schedule" column="scheduleId" select="com.zeroclub.dao.ScheduleDao.getById"/>
+    </resultMap>
+
+    <select id="getByScheduleId" resultMap="simpleProgram">
+        select * from table_schedule_program
+        where scheduleId = #{id}
+    </select>
+    <select id="getList" resultMap="program">
+        select * from table_schedule_program
+        where scheduleId in (
+            select id from table_schedule
+            where startDate &lt;= #{startDate} and endDate+86400 &gt; #{startDate} and
+            (week &amp; #{week}) &gt; 0 and
+            (deviceId = #{device.id} or deviceGroupId = #{device.group.id})
+        )
+    </select>
+    <select id="getOne" resultMap="simpleProgram">
+        select * from table_schedule_program
+        where 1=1
+        <foreach collection="program" item="item">
+            and startTime &lt;= #{item.startTime}
+            and endTime &gt; #{item.startTime}
+        </foreach>
+        and scheduleId in (
+            select id from table_schedule
+            where startDate &lt;= #{startDate} and endDate+86400 &gt; #{startDate} and
+            (week &amp; #{week}) &gt; 0 and
+            (deviceId = #{device.id} or deviceGroupId = #{device.group.id})
+        )
+    </select>
+
+    <insert id="insert">
+        insert into table_schedule_program(startTime, endTime, scheduleId, templateId) values
+        <foreach collection="program" separator="," item="item">
+            (#{item.startTime}, #{item.endTime}, #{id}, #{item.template.id})
+        </foreach>
+    </insert>
+    <delete id="delete">
+        delete from table_schedule_program
+        where scheduleId = #{id}
+    </delete>
+</mapper>

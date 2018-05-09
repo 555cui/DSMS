@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zeroclub.dao.UserDao">
+    <resultMap id="userMap" type="com.zeroclub.entity.User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="email" column="email"/>
+        <association property="group" column="groupId" select="com.zeroclub.dao.GroupDao.getById"/>
+    </resultMap>
+
+    <select id="getOne" parameterType="com.zeroclub.entity.User" resultMap="userMap" >
+        select id,name,email,groupId from table_user
+        where 1=1
+        <if test="id != null and id != ''" >
+            and id = #{id}
+        </if>
+        <if test="name != null and id != ''" >
+            and name = #{name}
+        </if>
+        <if test="password !=null and password !=''">
+            and password = #{password}
+        </if>
+        <if test="email != null and email !='' ">
+            and email = #{email}
+        </if>
+        <if test="group != null">
+            <if test="group.id != null and group.id !='' ">
+                and groupId = #{group.id}
+            </if>
+        </if>
+    </select>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="userMap">
+        select id,name,email,groupId from table_user
+        where id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.zeroclub.entity.User" >
+        update table_user
+        <set>
+            <if test="name !=null and name !=''">
+                name = #{name},
+            </if>
+            <if test="password != null and password !=''">
+                password = #{password},
+            </if>
+            <if test="email !=null and email !=''">
+                email = #{email},
+            </if>
+            <if test="group != null">
+                <if test="group.id !=null and group.id !=''">
+                    groupId = #{group.id}
+                </if>
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insert" parameterType="com.zeroclub.entity.User" >
+        insert into table_user(id, name, password, email)
+        values(#{id}, #{name}, #{password}, #{email})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.String" >
+        delete from table_user
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteList">
+        delete from table_user
+        where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

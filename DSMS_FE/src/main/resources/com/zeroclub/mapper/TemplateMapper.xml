@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeroclub.dao.TemplateDao">
+    <resultMap id="result" type="com.zeroclub.entity.Template">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="width" property="width"/>
+        <result column="height" property="height"/>
+        <result column="background_color" property="backgroundColor"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+        <association property="group" column="groupId" select="com.zeroclub.dao.TemplateGroupDao.getSimple"/>
+        <collection property="element" column="id" select="getElement"/>
+    </resultMap>
+    <resultMap id="elementMap" type="com.zeroclub.entity.TemplateElement">
+        <id column="id" property="id"/>
+        <result column="width" property="width"/>
+        <result column="height" property="height"/>
+        <result column="_left" property="left"/>
+        <result column="top" property="top"/>
+        <result column="z_index" property="zIndex"/>
+        <association property="media" column="mediaId" select="com.zeroclub.dao.MediaDao.getById"/>
+    </resultMap>
+    <select id="getOne" resultMap="result">
+        select * from table_template
+        where 1=1
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId=#{user.id}
+            </if>
+        </if>
+        <if test="group != null">
+            <if test="group != null and group.id!=''">
+                and groupId=#{group.id}
+            </if>
+        </if>
+    </select>
+    <select id="getById" resultMap="result">
+        select * from table_template
+        where id = #{id}
+    </select>
+    <select id="getList" resultMap="result">
+        select * from table_template
+        where 1=1
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+        <if test="name != null and name != ''">
+            and name=#{name}
+        </if>
+        <if test="user != null">
+            <if test="user.id != null and user.id != ''">
+                and userId=#{user.id}
+            </if>
+        </if>
+        <if test="group != null">
+            <if test="group.id!=null and group.id!=''">
+                and groupId=#{group.id}
+            </if>
+        </if>
+    </select>
+    <select id="getByGroup" resultMap="result">
+        select * from table_template
+        where groupId = #{groupId}
+    </select>
+    <insert id="insert">
+        insert into table_template(id, name, width, height, background_color, userId, groupId)
+        values(#{id}, #{name}, #{width}, #{height}, #{backgroundColor}, #{user.id}, #{group.id})
+    </insert>
+    <update id="update">
+        update table_template
+        <set>
+            <if test="name != null and name != ''">
+                name=#{name},
+            </if>
+            <if test="width!=null and width!=0">
+                width=#{width},
+            </if>
+            <if test="height!=null and height!=0">
+                height=#{height},
+            </if>
+            <if test="backgroundColor!=null and backgroundColor!=''">
+                background_color=#{backgroundColor},
+            </if>
+            <if test="group!=null">
+                <if test="group.id!=null and group.id!=''">
+                    groupId = #{group.id},
+                </if>
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+        <if test="user!=null">
+            <if test="user.id!=null and user.id!=''">
+                and userId=#{user.id}
+            </if>
+        </if>
+    </update>
+    <delete id="delete">
+        delete from table_template
+        where id = #{id}
+        <if test="user!=null">
+            <if test="user.id!=null and user.id!=''">
+                and userId = #{user.id}
+            </if>
+        </if>
+    </delete>
+    <delete id="deleteList">
+        delete from table_template
+        where id in
+        <foreach collection="array" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insertElement">
+        insert into table_template_element(id, width, height, _left, top, z_index, mediaId, templateId) values
+        <foreach collection="element" item="item" open="" close="" separator=",">
+            (#{item.id}, #{item.width}, #{item.height}, #{item.left}, #{item.top}, #{item.zIndex},
+            #{item.media.id}, #{id})
+        </foreach>
+    </insert>
+    <delete id="deleteElement">
+        delete from table_template_element
+        where templateId = #{id}
+    </delete>
+    <select id="getElement" resultMap="elementMap">
+        select * from table_template_element
+        where templateId =#{templateId}
+    </select>
+</mapper>
