@@ -1,6 +1,7 @@
 <template>
     <div>
       <login-page></login-page>
+        <logout-page></logout-page>
       <el-container class="no-box">
         <el-header class="no-box" height="80px">
             <div id="header-box">
@@ -46,8 +47,9 @@
 
 <script>
     import LoginPage from "./user/LoginPage";
+    import LogoutPage from './user/LoginPage';
     export default {
-        components: {LoginPage},
+        components: {LoginPage, LogoutPage},
         name: "index",
         methods: {
             handleSelect(key){
@@ -71,8 +73,13 @@
             },
         },
         created(){
-            if (sessionStorage.getItem('dsms_token')!==null)
-                this.$store.state.user.login=true;
+          const login = localStorage.getItem('dsms_token');
+          if (login!==null){
+            if (parseInt(login)+60*60*1000>(new Date()).valueOf()){
+              this.$store.commit('login');
+            }
+            else localStorage.removeItem('dsms_token');
+          }
         }
     }
 </script>
