@@ -188,6 +188,14 @@
             <version>2.7.3</version>
         </dependency>
         <!-- redis cache related.....end -->
+        <!-- jave -->
+        <dependency>
+            <groupId>it.sauronsoftware.jave</groupId>  <!--自定义-->
+            <artifactId>jave</artifactId>    <!--自定义-->
+            <version>1.0.2</version> <!--自定义-->
+            <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
+            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/jave-1.0.2.jar</systemPath> <!--项目根目录下的lib文件夹下-->
+        </dependency>
     </dependencies>
     <build>
         <finalName>DSMS_FE</finalName>
