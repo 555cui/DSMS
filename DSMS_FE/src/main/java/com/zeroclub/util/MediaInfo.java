@@ -6,6 +6,7 @@ import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.EncodingAttributes;
 import it.sauronsoftware.jave.VideoAttributes;
+import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,7 @@ import java.io.*;
 import java.util.UUID;
 
 public class MediaInfo {
+    private static Logger logger = Logger.getLogger(MediaInfo.class);
     public static Media getInfo(MultipartFile tempFile, String type, User user, String path)throws IOException{
         String fileName = UUID.randomUUID().toString();
 
@@ -48,11 +50,14 @@ public class MediaInfo {
             try{
                 encoder.encode(file, imageFile, ea);
             }catch (EncoderException e){
-                e.printStackTrace();
+                logger.error(e);
             }
         }
         else imageUrl = imageUrl + _type;
-        if (!imageFile.exists())return null;
+        if (!imageFile.exists()){
+            file.delete();
+            return null;
+        }
 
         BufferedImage bi = ImageIO.read(imageFile);
 
