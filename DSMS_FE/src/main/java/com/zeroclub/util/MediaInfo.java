@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public class MediaInfo {
     private static Logger logger = Logger.getLogger(MediaInfo.class);
-    public static Media getInfo(MultipartFile tempFile, String type, User user, String path)throws IOException{
+    public static Media getInfo(MultipartFile tempFile, String type, User user, String path) {
         String fileName = UUID.randomUUID().toString();
 
         String fullName = tempFile.getOriginalFilename();
@@ -32,7 +32,11 @@ public class MediaInfo {
 
         File file = new File(path+url);
         if (!file.getParentFile().exists())file.getParentFile().mkdirs();
-        tempFile.transferTo(file);
+        try {
+            tempFile.transferTo(file);
+        }catch (IOException e){
+            logger.error(e, e.getCause());
+        }
         if (!file.exists())return null;
 
         File imageFile = file;
@@ -59,24 +63,50 @@ public class MediaInfo {
             }
         }
         else imageUrl = imageUrl + _type;
+        logger.info("check file");
         if (!imageFile.exists()){
             file.delete();
             return null;
         }
 
-        BufferedImage bi = ImageIO.read(imageFile);
+        try {
+            BufferedImage bi = ImageIO.read(imageFile);
+            Media media = new Media();
+            media.setName(name);
+            media.setUser(user);
+            media.setUrl(url);
+            media.setImageUrl(imageUrl);
+            media.setEtcData(0);
+            media.setType(type);
+            media.set_type(_type);
+            media.setWidth(bi.getWidth());
+            media.setHeight(bi.getHeight());
 
-        Media media = new Media();
-        media.setName(name);
-        media.setUser(user);
-        media.setUrl(url);
-        media.setImageUrl(imageUrl);
-        media.setEtcData(0);
-        media.setType(type);
-        media.set_type(_type);
-        media.setWidth(bi.getWidth());
-        media.setHeight(bi.getHeight());
-
-        return media;
+            return media;
+        }
+        catch (IOException e){
+            logger.error(e, e.getCause());
+        }
+        return null;
+    }
+    public static boolean check(MultipartFile tempFile){
+        try {
+            File f = new File("/opt/test.mp4");
+            tempFile.transferTo(f);
+            EncodingAttributes ea = new EncodingAttributes();
+            ea.setDuration(0.001f);
+            ea.setOffset(3f);
+            ea.setFormat("image2");
+            ea.setVideoAttributes(new VideoAttributes());
+            Encoder en = new Encoder();
+            File target = new File("/opt/test.png");
+            en.encode(f, target, ea);
+            return target.exists();
+        }catch (IOException e){
+            logger.error(e, e.getCause());
+        }catch (EncoderException e){
+            logger.error(e, e.getCause());
+        }
+        return false;
     }
 }

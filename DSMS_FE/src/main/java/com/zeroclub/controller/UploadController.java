@@ -30,7 +30,7 @@ public class UploadController {
             @RequestParam("file")MultipartFile tempFile,
             @CookieValue(value="dsms_token", required=false) String token,
             @PathVariable("type") String type
-    )throws IOException {
+    ){
         User user = (User)cashService.get(token);
         if (user == null)return ReturnMap.getFalieReturn(10, "你还没登陆");
 
@@ -41,9 +41,8 @@ public class UploadController {
         return ReturnMap.getSuccessReturn(media);
     }
     @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public String uploadTest(@RequestParam("file")MultipartFile tempFile)throws IOException{
-        Media media = MediaInfo.getInfo(tempFile, "video", new User(), pathConfig.getPath());
-        if (media == null)return "error";
+    public String uploadTest(@RequestParam("file")MultipartFile tempFile){
+        if (MediaInfo.check(tempFile))return "error";
         return "success";
     }
 }
