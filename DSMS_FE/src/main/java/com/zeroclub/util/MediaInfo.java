@@ -39,13 +39,15 @@ public class MediaInfo {
         if (type.equals("video")){
             imageUrl = imageUrl + "png";
             imageFile = new File(path+imageUrl);
-            VideoAttributes va = new VideoAttributes();
-            va.setCodec("png");
+            logger.info(imageFile.getPath());
+            //VideoAttributes va = new VideoAttributes();
+            //va.setCodec("png");
             EncodingAttributes ea = new EncodingAttributes();
-            ea.setDuration(0.01f);
+            ea.setDuration(0.001f);
             ea.setOffset(3f);
             ea.setFormat("image2");
-            ea.setVideoAttributes(va);
+
+            //ea.setVideoAttributes(va);
             Encoder encoder = new Encoder();
             try{
                 logger.info("start get image");
