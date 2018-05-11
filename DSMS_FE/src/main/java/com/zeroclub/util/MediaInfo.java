@@ -39,9 +39,10 @@ public class MediaInfo {
         if (type.equals("video")){
             imageUrl = imageUrl + "png";
             imageFile = new File(path+imageUrl);
+            if (!imageFile.getParentFile().exists())imageFile.getParentFile().mkdirs();
             logger.info(imageFile.getPath());
             VideoAttributes va = new VideoAttributes();
-            va.setCodec("png");
+            //va.setCodec("png");
             EncodingAttributes ea = new EncodingAttributes();
             ea.setDuration(0.001f);
             ea.setOffset(3f);
@@ -52,6 +53,7 @@ public class MediaInfo {
             try{
                 logger.info("start get image");
                 encoder.encode(file, imageFile, ea);
+                logger.info("finish encode");
             }catch (EncoderException e){
                 logger.error(e, e.getCause());
             }
