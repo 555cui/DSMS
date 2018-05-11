@@ -47,7 +47,9 @@ public class MediaInfo {
             Encoder encoder = new Encoder();
             try{
                 encoder.encode(file, imageFile, ea);
-            }catch (EncoderException e){ }
+            }catch (EncoderException e){
+                e.printStackTrace();
+            }
         }
         else imageUrl = imageUrl + _type;
         if (!imageFile.exists())return null;
