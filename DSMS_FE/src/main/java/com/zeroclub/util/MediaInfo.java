@@ -90,7 +90,7 @@ public class MediaInfo {
     }
     public static boolean check(MultipartFile tempFile){
         try {
-            File f = new File("/home/dsms/test.mp4");
+            File f = new File("/home/admin/test.mp4");
             tempFile.transferTo(f);
             EncodingAttributes ea = new EncodingAttributes();
             ea.setDuration(0.001f);
@@ -98,7 +98,7 @@ public class MediaInfo {
             ea.setFormat("image2");
             ea.setVideoAttributes(new VideoAttributes());
             Encoder en = new Encoder();
-            File target = new File("/home/dsms/test.png");
+            File target = new File("/home/admin/test.png");
             en.encode(f, target, ea);
             return target.exists();
         }catch (IOException e){
