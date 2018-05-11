@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>play</title>
+    <title>dsms test</title>
     <!-- UC强制全屏 -->
     <meta name="full-screen" content="yes">
     <!-- QQ强制全屏 -->
@@ -18,5 +18,9 @@
 </head>
 <body>
     <h2>hello world</h2>
+    <form action="/DSMS_FE/upload/test" enctype="multipart/form-data" method="post">
+        <input type="file" name="file"/>
+        <button type="submit">ok</button>
+    </form>
 </body>
 </html>

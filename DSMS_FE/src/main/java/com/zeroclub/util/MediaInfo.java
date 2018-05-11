@@ -48,9 +48,10 @@ public class MediaInfo {
             ea.setVideoAttributes(va);
             Encoder encoder = new Encoder();
             try{
+                logger.info("start get image");
                 encoder.encode(file, imageFile, ea);
             }catch (EncoderException e){
-                logger.error(e);
+                logger.error(e, e.getCause());
             }
         }
         else imageUrl = imageUrl + _type;

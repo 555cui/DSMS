@@ -5,19 +5,14 @@ import com.zeroclub.entity.User;
 import com.zeroclub.service.CashService;
 import com.zeroclub.service.MediaService;
 import com.zeroclub.util.*;
-import it.sauronsoftware.jave.EncoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/upload")
@@ -44,5 +39,11 @@ public class UploadController {
         media = mediaService.save(media);
 
         return ReturnMap.getSuccessReturn(media);
+    }
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public String uploadTest(@RequestParam("file")MultipartFile tempFile)throws IOException{
+        Media media = MediaInfo.getInfo(tempFile, "video", new User(), pathConfig.getPath());
+        if (media == null)return "error";
+        return "success";
     }
 }
