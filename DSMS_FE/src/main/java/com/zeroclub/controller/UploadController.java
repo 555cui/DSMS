@@ -42,7 +42,7 @@ public class UploadController {
     }
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public String uploadTest(@RequestParam("file")MultipartFile tempFile){
-        if (MediaInfo.check(tempFile))return "error";
-        return "success";
+        if (MediaInfo.check(tempFile))return "success";
+        return "error";
     }
 }
