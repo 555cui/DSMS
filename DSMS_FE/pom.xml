@@ -188,14 +188,6 @@
             <version>2.7.3</version>
         </dependency>
         <!-- redis cache related.....end -->
-        <!-- jave -->
-        <dependency>
-            <groupId>it.sauronsoftware.jave</groupId>
-            <artifactId>jave</artifactId>
-            <version>1.0.2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/jave-1.0.2.jar</systemPath>
-        </dependency>
     </dependencies>
     <build>
         <finalName>DSMS_FE</finalName>

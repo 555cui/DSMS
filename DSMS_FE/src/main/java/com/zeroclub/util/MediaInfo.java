@@ -2,10 +2,6 @@ package com.zeroclub.util;
 
 import com.zeroclub.entity.Media;
 import com.zeroclub.entity.User;
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.EncoderException;
-import it.sauronsoftware.jave.EncodingAttributes;
-import it.sauronsoftware.jave.VideoAttributes;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,21 +41,9 @@ public class MediaInfo {
             imageFile = new File(path+imageUrl);
             if (!imageFile.getParentFile().exists())imageFile.getParentFile().mkdirs();
             logger.info(imageFile.getPath());
-            VideoAttributes va = new VideoAttributes();
-            //va.setCodec("png");
-            EncodingAttributes ea = new EncodingAttributes();
-            ea.setDuration(0.001f);
-            ea.setOffset(3f);
-            ea.setFormat("image2");
-
-            ea.setVideoAttributes(va);
-            Encoder encoder = new Encoder();
-            try{
-                logger.info("start get image");
-                encoder.encode(file, imageFile, ea);
-            }catch (EncoderException e){
-                logger.error(e, e.getCause());
-            }
+            FFMpegCreater ffMpegCreater = new FFMpegCreater();
+            ffMpegCreater.setEncode(file, imageFile);
+            ffMpegCreater.run();
         }
         else imageUrl = imageUrl + _type;
         logger.info("check file");
@@ -91,23 +75,16 @@ public class MediaInfo {
     public static boolean check(MultipartFile tempFile){
         File f = new File("/home/admin/test.mp4");
         File target = new File("/home/admin/test.png");
-        try {
+        try{
             tempFile.transferTo(f);
-            VideoAttributes va = new VideoAttributes();
-            EncodingAttributes ea = new EncodingAttributes();
-            ea.setDuration(0.001f);
-            ea.setOffset(3f);
-            ea.setFormat("image2");
-            ea.setVideoAttributes(new VideoAttributes());
-            Encoder en = new Encoder();
-            en.encode(f, target, ea);
-            return target.exists();
-        }catch (IOException e){
-            logger.error(e, e.getCause());
-        }catch (EncoderException e){
-            logger.error(e, e.getCause());
-            if (target.exists())return true;
         }
-        return false;
+        catch (IOException e){
+            logger.error(e, e.getCause());
+            return false;
+        }
+        FFMpegCreater ffMpegCreater = new FFMpegCreater();
+        ffMpegCreater.setEncode(f, target);
+        ffMpegCreater.run();
+        return target.exists();
     }
 }
