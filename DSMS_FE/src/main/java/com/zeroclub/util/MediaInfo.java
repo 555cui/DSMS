@@ -57,7 +57,6 @@ public class MediaInfo {
             try{
                 logger.info("start get image");
                 encoder.encode(file, imageFile, ea);
-                logger.info("finish encode");
             }catch (EncoderException e){
                 logger.error(e, e.getCause());
             }
