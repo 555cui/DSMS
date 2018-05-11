@@ -89,22 +89,24 @@ public class MediaInfo {
         return null;
     }
     public static boolean check(MultipartFile tempFile){
+        File f = new File("/home/admin/test.mp4");
+        File target = new File("/home/admin/test.png");
         try {
-            File f = new File("/home/admin/test.mp4");
             tempFile.transferTo(f);
+            VideoAttributes va = new VideoAttributes();
             EncodingAttributes ea = new EncodingAttributes();
             ea.setDuration(0.001f);
             ea.setOffset(3f);
             ea.setFormat("image2");
             ea.setVideoAttributes(new VideoAttributes());
             Encoder en = new Encoder();
-            File target = new File("/home/admin/test.png");
             en.encode(f, target, ea);
             return target.exists();
         }catch (IOException e){
             logger.error(e, e.getCause());
         }catch (EncoderException e){
             logger.error(e, e.getCause());
+            if (target.exists())return true;
         }
         return false;
     }

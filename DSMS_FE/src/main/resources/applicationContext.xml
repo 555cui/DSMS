@@ -94,4 +94,8 @@
         <property name="linuxPath" value="/home/admin"/>
         <property name="winPath" value="d:"/>
     </bean>
+
+    <bean id="ffMpegCreater" class="com.zeroclub.util.FFMpegCreater">
+        <property name="ffmpegPath" value="/home/admin/DSMS/plugin/ffmpeg"/>
+    </bean>
 </beans>
