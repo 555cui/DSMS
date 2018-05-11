@@ -47,7 +47,7 @@
 
 <script>
     import LoginPage from "./user/LoginPage";
-    import LogoutPage from "./user/LogoutPage";
+    import LogoutPage from "./user/LogoutPage.vue";
     export default {
         components: {LoginPage, LogoutPage},
         name: "index",
