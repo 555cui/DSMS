@@ -6,12 +6,7 @@ import java.io.IOException;
 public class FFMpegCreater implements Runnable{
     private File source;
     private File target;
-    private String ffmpegPath;
     private Thread thread;
-
-    public void setFfmpegPath(String ffmpegPath){
-        this.ffmpegPath = ffmpegPath;
-    }
 
     public void setEncode(File source, File target){
         this.source = source;
@@ -20,7 +15,7 @@ public class FFMpegCreater implements Runnable{
 
     public void run() {
         Runtime ffmpeg = Runtime.getRuntime();
-        String cmd=this.ffmpegPath+" -i "+source.getPath()+" -an -ss 3 -t 0.001 -f image2 -y "+target.getPath();
+        String cmd="ffmpeg -i "+source.getPath()+" -an -ss 3 -t 0.001 -f image2 -y "+target.getPath();
         try{
             ffmpeg.exec(cmd);
         }
