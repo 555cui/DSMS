@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        name: "logoutPage",
+        name: "LogoutPage",
         computed: {
             show(){
                 return this.$store.state.user.code !== 0;
