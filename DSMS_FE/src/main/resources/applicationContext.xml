@@ -91,7 +91,7 @@
     <!-- redis config end -->
 
     <bean id="pathConfig" class="com.zeroclub.util.PathConfig">
-        <property name="linuxPath" value="~/data"/>
+        <property name="linuxPath" value="/home/dsms"/>
         <property name="winPath" value="d:"/>
     </bean>
 </beans>
