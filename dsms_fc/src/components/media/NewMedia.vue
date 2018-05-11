@@ -66,7 +66,7 @@
               <el-form-item label="返回数据格式" prop="url">
                 <el-input v-model="media.imageUrl" placeholder="example: data.user.name"></el-input>
               </el-form-item>
-              <el-form-item label="刷新时间(ms)">
+              <el-form-item label="字体大小">
                 <el-input type="number" v-model.number="media.etcData"></el-input>
               </el-form-item>
             </div>
@@ -111,7 +111,7 @@
         props: ['videoList', 'imageList'],
         data(){
             const nameRule = (rule, value, callback) => {
-                this.$ajax.post('/media/name', {name: value}, {responseType: 'json'}).then(response => {
+                this.$ajax.post('/DSMS_FE/media/name', {name: value}, {responseType: 'json'}).then(response => {
                     if (response.data.code >= 10 && response.data.code < 20)
                         this.$store.state.user.code=response.data.code;
                     else if (response.data.code !== 0)callback(new Error(response.data.msg));
@@ -177,7 +177,7 @@
             onUploadFiles(param){
                 this.flag=false;
                 const form = new FormData();
-                const url = '/upload/'+this.$store.state.media.action;
+                const url = '/DSMS_FE/upload/'+this.$store.state.media.action;
                 form.append('file', param.file);
                 this.$ajax.post(url, form, {'Content-Type': 'multipart/form-data'}).then(
                     response => {
@@ -222,7 +222,7 @@
                                 }
                                 media.group=list;
                             }
-                            this.$ajax.post('/media/',media,{responseType:'json'}).then(
+                            this.$ajax.post('/DSMS_FE/media/',media,{responseType:'json'}).then(
                                 response => {
                                     if (response.data.code === 0){
                                         this.$emit('OnNewMedia', response.data.data);

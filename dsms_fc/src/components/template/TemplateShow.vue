@@ -77,7 +77,7 @@
         components: {TemplateNew},
         name: "template-show",
         created(){
-            const url = "/templateGroup/";
+            const url = "/DSMS_FE/templateGroup/";
             this.$ajax.get(url).then(response=>{
                 if (response.data.code === 0){
                     this.group = response.data.data;
@@ -112,7 +112,7 @@
                         cancelButtonText: '取消',
                         inputErrorMessage: '分组已存在'
                     }).then(value => {
-                        const url = '/templateGroup/';
+                        const url = '/DSMS_FE/templateGroup/';
                         this.$ajax.post(url,{name:value.value}).then(response=>{
                             if (response.data.code===0){
                                 this.group.push(response.data.data);
@@ -149,7 +149,7 @@
                     }).then(() => {
                         const tabs = this.group;
                         const i = tabs.findIndex(item=>item.name===targetName);
-                        const url = '/templateGroup/'+tabs[i].id;
+                        const url = '/DSMS_FE/templateGroup/'+tabs[i].id;
                         this.$ajax.delete(url).then(response=>{
                             if (response.data.code===0){
                                 tabs.splice(i,1);
@@ -188,7 +188,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const url = '/template/delete';
+                    const url = '/DSMS_FE/template/delete';
                     this.$ajax.post(url, this.templateSelection).then(response=>{
                         if (response.data.code===0){
                             for(const item of this.templateSelection){
@@ -210,7 +210,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const url = '/template/'+row.id;
+                    const url = '/DSMS_FE/template/'+row.id;
                     this.$ajax.delete(url).then(response=>{
                         if (response.data.code === 0){
                             const groupIndex = this.group.findIndex(item => item.id === row.group.id);

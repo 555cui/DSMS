@@ -4,7 +4,7 @@
                 title="登记设备"
                 :visible.sync="show"
                 :before-close="beforeClose"
-                width="30%">
+                width="320">
             <div v-if="step===0" class="step-action">
                 <div>你的设备还没登记或登记信息已丢失。</div>
                 <div>请输入设备的管理用户名和密码</div>
@@ -68,7 +68,7 @@
         data(){
             const nameRule = (rule, value, callback) => {
                 this.device.user = this.user;
-                this.$ajax.post('/device/name', this.device).then(
+                this.$ajax.post('/DSMS_FE/device/name', this.device).then(
                     response => {
                         if (response.data.code !== 0) callback(new Error(response.data.msg));
                         else callback();
@@ -118,7 +118,7 @@
                         this.isLoad=true;
                         this.$refs['userF'].validate(val=>{
                             if (val){
-                                const url = '/deviceGroup/pass';
+                                const url = '/DSMS_FE/deviceGroup/pass';
                                 const u = {
                                     name: '',
                                     password: '',
@@ -145,7 +145,7 @@
                         if (this.action===1){
                             this.$refs['deviceF'].validate(val=>{
                                 if (val){
-                                    const url = '/device/';
+                                    const url = '/DSMS_FE/device/';
                                     const dev = {
                                         name: '',
                                         user: {
@@ -175,7 +175,7 @@
                             });
                         }
                         else {
-                            const url = '/device/check';
+                            const url = '/DSMS_FE/device/check';
                             const dev = {
                                 id : '',
                                 user: {

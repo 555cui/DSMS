@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :visible.sync="show" title="你已经登出" :before-close="onClose">
+        <el-dialog :visible.sync="$store.state.user.code !== 0" title="你已经登出" :before-close="onClose">
             <span>{{msg}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="onClose">确 定</el-button>

@@ -120,7 +120,7 @@
             }
         },
         mounted(){
-            const url = '/user/';
+            const url = '/DSMS_FE/user/';
             this.$ajax.get(url).then(
                 response => {
                     if (response.data.code === 0){
@@ -131,7 +131,7 @@
                     }
                 }
             );
-            const url2 = '/deviceGroup/';
+            const url2 = '/DSMS_FE/deviceGroup/';
             this.$ajax.get(url2).then(response => {
                 if (response.data.code === 0){
                     this.group = response.data.data;
@@ -165,7 +165,7 @@
                     if (!emailReg.test(value)) {
                         callback(new Error('邮箱格式不正确'));
                     } else {
-                        this.$ajax.post('/check/email', {email: value}).then(response => {
+                        this.$ajax.post('/DSMS_FE/check/email', {email: value}).then(response => {
                             if (response.data.code === 0){
                                 callback();
                             } else {
@@ -220,7 +220,7 @@
                 window.history.go(-1);
             },
             onUpdateUser(){
-                const url = '/user/';
+                const url = '/DSMS_FE/user/';
                 const userData = {
                     name: this.userFormData.name,
                     password: this.userFormData.password,
@@ -247,7 +247,7 @@
                         cancelButtonText: '取消',
                         inputErrorMessage: '分组已存在'
                     }).then(value => {
-                        const url = '/deviceGroup/';
+                        const url = '/DSMS_FE/deviceGroup/';
                         this.$ajax.post(url,{name:value.value}).then(response=>{
                             if (response.data.code===0){
                                 this.group.push(response.data.data);
@@ -284,7 +284,7 @@
                     }).then(() => {
                         const tabs = this.group;
                         const i = tabs.findIndex(item=>item.name===targetName);
-                        const url = '/deviceGroup/'+tabs[i].id;
+                        const url = '/DSMS_FE/deviceGroup/'+tabs[i].id;
                         this.$ajax.delete(url).then(response=>{
                             if (response.data.code===0){
                                 tabs.splice(i,1);
@@ -324,7 +324,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    const url = '/device/'+row.id;
+                    const url = '/DSMS_FE/device/'+row.id;
                     this.$ajax.delete(url).then(response=>{
                         if (response.data.code === 0){
                             const groupIndex = this.group.findIndex(item => item.id === row.group.id);

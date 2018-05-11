@@ -19,12 +19,12 @@ const router = new VueRouter({
 			{
 				path: '/', component: index,
 				children: [
-					{path: '/', redirect: 'first'},
-					{path: '/first', component: FirstPage},
-					{path: '/schedule', component: Schedule},
-					{path: '/template', component: Template},
-					{path: '/template/:id', component: TemplateEdit},
-					{path: '/media', component: Media},
+					{path: '', redirect: 'first'},
+					{path: 'first', component: FirstPage},
+					{path: 'schedule', component: Schedule},
+					{path: 'template', component: Template},
+					{path: 'template/:id', component: TemplateEdit},
+					{path: 'media', component: Media},
 				],
 			},
 			{path: '/userCenter', component: UserCenter},

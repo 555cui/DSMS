@@ -113,7 +113,7 @@
             }
         },
         created(){
-            const url = '/deviceGroup/';
+            const url = '/DSMS_FE/deviceGroup/';
             this.$ajax.get(url).then(response=>{
                 if (response.data.code===0){
                     this.deviceGroup=response.data.data;
@@ -123,7 +123,7 @@
                 else this.$message.error('获取数据出错');
             }).catch(e=>{this.$message.error('服务器出错')});
 
-            const url2 = '/templateGroup/';
+            const url2 = '/DSMS_FE/templateGroup/';
             this.$ajax.get(url2).then(response=>{
                 if (response.data.code===0){
                     this.templateGroup=response.data.data;
@@ -238,7 +238,7 @@
                 }
             },
             saveToServer(){
-                const url = '/schedule/';
+                const url = '/DSMS_FE/schedule/';
                 const scheduleData = {
                     startDate: null,
                     endDate: null,
@@ -260,10 +260,12 @@
                         }
                     })
                 }
-                if (this.scheduleD.type === 'group')
-                    scheduleData.deviceGroup=this.scheduleD.deviceGroup;
-                if (this.scheduleD.type === 'device')
-                    scheduleData.device=this.scheduleD.device;
+                if (this.scheduleD.type === 'group'){
+                  scheduleData.deviceGroup=this.scheduleD.deviceGroup;
+                }
+                if (this.scheduleD.type === 'device'){
+                  scheduleData.device=this.scheduleD.device;
+                }
                 if (this.action==='new'){
                     this.$ajax.post(url,scheduleData).then(response=>{
                         if (response.data.code===0){
@@ -315,11 +317,15 @@
                             endTime: program.endTime,
                             template: program.template,
                         });
-                        if (this.scheduleD.type === 'group')
-                            scheduleData.deviceGroup=this.scheduleD.deviceGroup;
-                        if (this.scheduleD.type === 'device')
-                            scheduleData.device=this.scheduleD.device;
-                        this.$ajax.post('/schedule/check', scheduleData).then(response=>{
+                        if (this.scheduleD.type === 'group'){
+                          scheduleData.deviceGroup=this.scheduleD.deviceGroup;
+                          scheduleData.device=null;
+                        }
+                        if (this.scheduleD.type === 'device'){
+                          scheduleData.device=this.scheduleD.device;
+                          scheduleData.deviceGroup=null;
+                        }
+                        this.$ajax.post('/DSMS_FE/schedule/check', scheduleData).then(response=>{
                             if (response.data.code===0){
                                 if (this.action==='new'){
                                     if (response.data.data.length===0)

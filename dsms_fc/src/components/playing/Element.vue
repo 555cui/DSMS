@@ -2,7 +2,7 @@
     <div>
         <video :id="element.id"
                :src="element.media.url"
-               hidden playsinline autoplay loop muted
+               hidden playsinline :muted="true"
                v-if="element.media.type==='video'">
         </video>
         <img hidden :id="element.id"
@@ -11,7 +11,7 @@
         <div v-else-if="element.media.type==='group'">
             <video :id="element.id"
                    :src="src"
-                   hidden playsinline autoplay muted
+                   hidden playsinline autoplay :muted="true"
                    v-if="element.media._type==='video'"></video>
             <img hidden :id="element.id"
                  :src="src"
@@ -28,31 +28,31 @@
         props: ['element'],
         created(){
             if (this.element.media.type==='group'){
-                src = this.element.media.group[0].url;
+                this.src = this.element.media.group[0].url;
             }
         },
         mounted(){
-            if (this.element.media.type==='group'){
-                if (this.element.media._type==='video'){
-                    const video = document.getElementById(this.element.id);
-                    video.onended= ev => {
-                        let index = this.element.media.group.findIndex(item=> item.url = this.src);
-                        index = (index+1)%this.element.media.group.length;
-                        this.src = this.element.media.group[index].url;
-                    }
+            if (this.element.media.type==='group') {
+              if (this.element.media._type === 'video') {
+                const video = document.getElementById(this.element.id);
+                video.onended = ev => {
+                  let index = this.element.media.group.findIndex(item => item.url = this.src);
+                  index = (index + 1) % this.element.media.group.length;
+                  this.src = this.element.media.group[index].url;
                 }
-                else if (this.element.media._type==='image'){
-                    this.id = setInterval(()=>{
-                        if (this.etc>=this.element.media.etcData){
-                            const image = document.getElementById(this.element.id);
-                            this.etc = 0;
-                            let index = this.element.media.group.findIndex(item=> item.url=this.src);
-                            index = (index+1)%this.element.media.group[index].url;
-                            this.src = this.element.media.group[index].url;
-                        }
-                        this.etc+=20;
-                    }, 20);
-                }
+              }
+              else if (this.element.media._type === 'image') {
+                this.id = setInterval(() => {
+                  if (this.etc >= this.element.media.etcData) {
+                    const image = document.getElementById(this.element.id);
+                    this.etc = 0;
+                    let index = this.element.media.group.findIndex(item => item.url = this.src);
+                    index = (index + 1) % this.element.media.group[index].url;
+                    this.src = this.element.media.group[index].url;
+                  }
+                  this.etc += 20;
+                }, 20);
+              }
             }
         },
         beforeDestroy(){
@@ -68,6 +68,13 @@
         directives: {
             draw: {
                 inserted(el, binding){
+                  if (binding.value.media.type==='video'){
+                    const video = document.getElementById(binding.value.id);
+                    video.onended = ev => {
+                      video.play();
+                    };
+                    video.play();
+                  }
                     if (binding.value.media.type!=='text'){
                         el.dataset.id = setInterval(()=>{
                             const pan = el.getContext("2d");

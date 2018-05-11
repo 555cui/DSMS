@@ -39,7 +39,7 @@
         props: ['group'],
         data(){
             const nameRule = (rule, value, callback) => {
-                this.$ajax.post('/template/name', {name: value}).then(response => {
+                this.$ajax.post('/DSMS_FE/template/name', {name: value}).then(response => {
                     if (response.data.code >= 10 && response.data.code < 20)
                         this.$store.state.user.code=response.data.code;
                     else if (response.data.code !== 0)callback(new Error(response.data.msg));
@@ -79,7 +79,7 @@
             onTemplateEdit(){
                 this.$refs['form'].validate(valid => {
                     if (valid){
-                        const url = '/template/';
+                        const url = '/DSMS_FE/template/';
                         this.$ajax.post(url, this.template).then(response=>{
                             if (response.data.code===0){
                                 this.$emit('new', response.data.data);

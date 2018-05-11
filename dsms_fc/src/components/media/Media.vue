@@ -45,7 +45,7 @@
         components: {EditMedia, MediaCard, NewMedia},
         name: "media",
         created(){
-            this.$ajax.get('/media/').then(response => {
+            this.$ajax.get('/DSMS_FE/media/').then(response => {
                 if (response.data.code === 0){
                     this.mediaList.video = response.data.data.filter(item => item.type === 'video');
                     this.mediaList.image = response.data.data.filter(item => item.type === 'image');
@@ -108,7 +108,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        const url = '/media/'+media.id;
+                        const url = '/DSMS_FE/media/'+media.id;
                         this.$ajax.delete(url).then(response=>{
                             if (response.data.code === 0){
                                 const i = this.mediaList[media.type].findIndex(item => item.id===media.id);
@@ -151,7 +151,7 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        const url = '/media/delete';
+                        const url = '/DSMS_FE/media/delete';
                         this.$ajax.post(url,this.checkList[this.action],{responseType: 'json'}).then(response=>{
                             if (response.data.code === 0){
                                 for(let media of this.checkList[this.action]){

@@ -91,15 +91,17 @@
         name: "schedule",
         components: {ProgramList, ScheduleEdit},
         created(){
-            const url = '/deviceGroup/';
+            const url = '/DSMS_FE/deviceGroup/';
             this.$ajax.get(url).then(response=>{
                 if (response.data.code===0){
                     this.group=response.data.data;
                     this.device=this.group[0].device[0];
                     this.reflashPrograms();
                 }
-                else if (response.data.code>=10&&response.data.code<20)
-                    this.$store.state.user.code=response.data.code;
+                else if (response.data.code>=10&&response.data.code<20){
+                  this.$store.state.user.code=response.data.code;
+                  console.info('set code'+this.$store.state.user.code);
+                }
                 else this.$message.error('获取数据出错');
             }).catch(e=>{this.$message.error('服务器出错')});
         },
@@ -160,7 +162,7 @@
         },
         methods: {
             reflashPrograms(){
-                const url2 = '/program/';
+                const url2 = '/DSMS_FE/program/';
                 const today = {
                     device: this.device,
                     startDate: this.selectDate,
@@ -197,7 +199,7 @@
             },
             getState(callback){
                 if (this.device.id!=null){
-                    const url = '/device/'+this.device.id+'/state';
+                    const url = '/DSMS_FE/device/'+this.device.id+'/state';
                     this.$ajax.get(url).then(response=>{
                         if (response.data.code===0){
                             this.deviceState = response.data.data;

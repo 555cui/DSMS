@@ -38,7 +38,7 @@
         },
         mounted(){
             html2canvas(this.$refs['playing']).then(canvas=>{
-                const url = '/device/state';
+                const url = '/DSMS_FE/device/state';
                 const state = {
                     device: {
                         id: localStorage.getItem('DevicePlayID')
@@ -53,7 +53,7 @@
                 if (count >= 60000){
                     count = 0;
                     html2canvas(this.$refs['playing']).then(canvas=>{
-                        const url = '/device/state';
+                        const url = '/DSMS_FE/device/state';
                         const state = {
                             device: {
                                 id: localStorage.getItem('DevicePlayID')
@@ -65,7 +65,7 @@
                     });
                 }
                 else {
-                    const url = '/device/state';
+                    const url = '/DSMS_FE/device/state';
                     const state = {
                         device: {
                             id: localStorage.getItem('DevicePlayID')

@@ -111,7 +111,7 @@
                 console.info('update:'+this.mediaForm.id);
                 this.$refs['mediaF'].validate(valid => {
                     if (valid){
-                        const url = '/media/'+this.mediaForm.id;
+                        const url = '/DSMS_FE/media/'+this.mediaForm.id;
                         if (this.mediaForm.type==='group'){
                             console.info(this.mediaForm.group);
                             const group = [];
@@ -162,7 +162,7 @@
             const nameRule = (rule, value, callback) => {
                 if (value === this.media.name)callback();
                 else {
-                    this.$ajax.post('/media/name', {name: value}, {responseType: 'json'}).then(response => {
+                    this.$ajax.post('/DSMS_FE/media/name', {name: value}, {responseType: 'json'}).then(response => {
                         if (response.data.code >= 10 && response.data.code < 20)
                             this.$store.state.user.code=response.data.code;
                         else if (response.data.code !== 0)callback(new Error(response.data.msg));

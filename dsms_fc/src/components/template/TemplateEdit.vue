@@ -160,7 +160,7 @@
         name: "template-edit",
         components: {ElementCard},
         created(){
-            this.$ajax.get('/media/').then(response => {
+            this.$ajax.get('/DSMS_FE/media/').then(response => {
                 if (response.data.code === 0){
                     this.mediaList.video = response.data.data.filter(item => item.type === 'video');
                     this.mediaList.image = response.data.data.filter(item => item.type === 'image');
@@ -170,7 +170,7 @@
                 else if (response.data.code>=10&&response.data.code<20)
                     this.$store.state.user.code = response.data.code;
             });
-            const url = '/template/'+this.$route.params.id;
+            const url = '/DSMS_FE/template/'+this.$route.params.id;
             this.$ajax.get(url).then(response => {
                 if (response.data.code === 0){
                     this.template = response.data.data;
@@ -181,7 +181,7 @@
                 else if (response.data.code>=10&&response.data.code<20)
                     this.$store.state.user.code = response.data.code;
             });
-            this.$ajax.get("/templateGroup/").then(response=>{
+            this.$ajax.get("/DSMS_FE/templateGroup/").then(response=>{
                 if (response.data.code === 0){
                     this.group = response.data.data;
                 }
@@ -200,7 +200,7 @@
                 console.info(value);
                 console.info(this.templateOld.name);
                 if (value !== this.templateOld.name){
-                    this.$ajax.post('/template/name', {name: value}).then(response => {
+                    this.$ajax.post('/DSMS_FE/template/name', {name: value}).then(response => {
                         if (response.data.code >= 10 && response.data.code < 20)
                             this.$store.state.user.code=response.data.code;
                         else if (response.data.code !== 0)callback(new Error(response.data.msg));
@@ -311,7 +311,7 @@
             onSaveTemplate(){
                 this.$refs['formTemplate'].validate(valid => {
                     if (valid) {
-                        const url = '/template/'+this.$route.params.id;
+                        const url = '/DSMS_FE/template/'+this.$route.params.id;
                         this.$ajax.put(url, this.template).then(response=>{
                             if (response.data.code === 0){
                                 this.template = response.data.data;

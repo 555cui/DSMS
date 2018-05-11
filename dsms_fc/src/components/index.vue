@@ -47,7 +47,7 @@
 
 <script>
     import LoginPage from "./user/LoginPage";
-    import LogoutPage from './user/LoginPage';
+    import LogoutPage from './user/LogoutPage';
     export default {
         components: {LoginPage, LogoutPage},
         name: "index",
@@ -60,7 +60,7 @@
                     this.toUserCenter(command);
                 } else {
                     if (!this.$store.state.user.logout){
-                        const url = '/check/logout';
+                        const url = '/DSMS_FE/check/logout';
                         this.$ajax.delete(url).then(response => {
                             if(response.data.code === 0)this.$store.commit(command);
                         });

@@ -42,10 +42,8 @@ public class ProgramController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    private Map getPlaying(
-            @PathVariable String id
-    ){
-        DeviceState state = (DeviceState)cashService.get(id);
+    private Map getPlaying(@PathVariable String id){
+        DeviceState state = (DeviceState)cashService.read(id);
         Device device = new Device();
         device.setId(id);
         device = deviceService.getOne(device);
@@ -57,8 +55,6 @@ public class ProgramController {
             state = new DeviceState();
             state.setDevice(device);
         }
-        else device = state.getDevice();
-
 
         Schedule schedule = new Schedule();
         //星期
@@ -81,11 +77,11 @@ public class ProgramController {
 
         if (program!=null){
             state.setType("playing");
-            cashService.set(id, state, 60);
+            cashService.set(id, state, 5);
             return ReturnMap.getSuccessReturn(program);
         }
         state.setType("ready");
-        cashService.set(id, state, 60);
+        cashService.set(id, state, 5);
         return ReturnMap.getFalieReturn(60, "no program");
     }
 }

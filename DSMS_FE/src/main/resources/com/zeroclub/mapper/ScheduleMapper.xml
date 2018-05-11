@@ -71,19 +71,20 @@
     </delete>
     <update id="update">
         update table_schedule
-        <set>
-            <if test="startDate!=null">
-                startDate= #{startDate},
+        set
+        <if test="startDate!=null">
+            startDate= #{startDate},
+        </if>
+        <if test="endDate!=null">
+            endDate=#{endDate},
+        </if>
+        <if test="week != null">
+            <if test="week>0">
+                week = #{week},
             </if>
-            <if test="endDate!=null">
-                endDate=#{endDate},
-            </if>
-            <if test="week != null">
-                <if test="week>0">
-                    week = #{week}
-                </if>
-            </if>
-        </set>
+        </if>
+        deviceId = #{device.id},
+        deviceGroupId = #{deviceGroup.id}
         where id =#{id}
         <if test="user!=null">
             <if test="user.id!=null and user.id!=''">

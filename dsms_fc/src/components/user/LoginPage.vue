@@ -47,7 +47,7 @@
         data(){
             const emailReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
             const nameRule = (rule, value, callback) => {
-                this.$ajax.post('/check/name', {name: value}, {responseType: 'json'}).then(response => {
+                this.$ajax.post('/DSMS_FE/check/name', {name: value}).then(response => {
                     if (response.data.code !== 0)callback(new Error(response.data.msg));
                     else callback();
                 });
@@ -65,7 +65,7 @@
                 if (value === '') callback(new Error('请输入邮箱'));
                 else if (!emailReg.test(value)) callback(new Error('邮箱格式不正确'));
                 else {
-                    this.$ajax.post('/check/email', {email: value}, {responseType: 'json'}).then(
+                    this.$ajax.post('/DSMS_FE/check/email', {email: value}).then(
                         response => {
                             if (response.data.code !== 0)callback(new Error(response.data.msg));
                             else callback();
@@ -120,7 +120,7 @@
                             name: this.user.name,
                             password: this.user.password,
                         };
-                        this.$ajax.post('/check/login', user).then(response => {
+                        this.$ajax.post('/DSMS_FE/check/login', user).then(response => {
                             if (response.data.code === 0){
                                 this.$store.commit("login");
                                 this.closeLoginPage();
@@ -139,7 +139,7 @@
                             password: this.user.password,
                             email: this.user.email,
                         };
-                        this.$ajax.post('/check/register', user).then(response => {
+                        this.$ajax.post('/DSMS_FE/check/register', user).then(response => {
                             if (response.data.code === 0){
                                 this.$store.commit("login");
                                 this.closeLoginPage();

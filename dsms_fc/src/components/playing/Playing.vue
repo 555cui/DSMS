@@ -1,6 +1,6 @@
 <template>
     <div @click="fullscreen">
-        <register-device :show="msg==='noRegister'" @close="msg='waiting'"></register-device>
+        <register-device :show="msg==='noRegister'" @close="looping"></register-device>
         <display :template="template" v-if="msg==='playing'" id="display"></display>
         <div v-else id="msg-box">{{msg}}</div>
     </div>
@@ -28,7 +28,6 @@
             }
         },
         created(){
-            console.info('创建');
             this.id = localStorage.getItem('DevicePlayID');
             if (this.id === null){
                 this.msg='noRegister';
@@ -50,11 +49,13 @@
                 if (this.id === null){
                     console.info('丢失唯一标识');
                     this.msg='noRegister';
+                  clearInterval(this.interval);
+                  this.$message.error('结束定时任务');
                 }
                 else {
                     console.info('获取设备唯一标识成功:'+this.id);
                     console.info('开始请求模板');
-                    const url = '/program/'+this.id;
+                    const url = '/DSMS_FE/program/'+this.id;
                     this.$ajax.get(url).then(response=>{
                         if (response.data.code===0){
                             console.info('获取成功');
@@ -79,6 +80,8 @@
                             localStorage.removeItem('DevicePlayID');
                             this.msg='noRegister';
                             this.$message.error('no register');
+                          clearInterval(this.interval);
+                          this.$message.error('结束定时任务');
                         }
                     })
                 }
