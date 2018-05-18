@@ -40,7 +40,8 @@
         },
         methods: {
             looping(){
-                this.interval = setInterval(this.getTemplate, 5*1000);
+              this.msg='waiting';
+              this.interval = setInterval(this.getTemplate, 5*1000);
             },
             getTemplate(){
                 console.info('开始获取模板');

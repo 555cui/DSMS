@@ -1,5 +1,6 @@
 package com.zeroclub.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.zeroclub.entity.Program;
 import com.zeroclub.entity.Schedule;
 import com.zeroclub.entity.User;
@@ -23,6 +24,19 @@ public class ScheduleController {
 
     @Resource
     private RedisCash cashService;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @ResponseBody
+    public Map getSchedule(
+            @CookieValue(value = "dsms_token", required = false)String token
+    ){
+        User user = (User) cashService.get(token);
+        if (user==null)return ReturnMap.getFalieReturn(10, "你还没有登陆");
+        Schedule schedule = new Schedule();
+        schedule.setUser(user);
+        logger.info(JSON.toJSONString(schedule));
+        return ReturnMap.getSuccessReturn(scheduleService.getList(schedule));
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseBody
@@ -87,5 +101,17 @@ public class ScheduleController {
         schedule.setUser(user);
 
         return ReturnMap.getSuccessReturn(scheduleService.getList(schedule));
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public Map deleteList(
+            @CookieValue(value = "dsms_token", required = false)String token,
+            @RequestBody String[] ids
+    ){
+        User user = (User)cashService.get(token);
+        if (user==null)return ReturnMap.getFalieReturn(10, "你还没有登陆");
+        scheduleService.deleteList(ids);
+        return ReturnMap.getSuccessReturn("delete success");
     }
 }

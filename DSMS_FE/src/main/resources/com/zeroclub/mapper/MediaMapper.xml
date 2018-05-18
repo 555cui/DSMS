@@ -118,7 +118,7 @@
         </foreach>
     </delete>
 
-    <select id="selectMediaByGroupId" parameterType="java.lang.String" resultMap="simpleMap">
+    <select id="selectMediaByGroupId" resultMap="simpleMap">
         select * from table_media
         where id in (
             select mediaId from table_media_group

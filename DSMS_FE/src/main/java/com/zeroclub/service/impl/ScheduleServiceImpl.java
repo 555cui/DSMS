@@ -29,6 +29,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDao.getList(schedule);
     }
 
+    public void deleteList(String[] ids) {
+        scheduleDao.deleteList(ids);
+    }
+
     @Transactional
     public Schedule save(Schedule schedule) {
         if (schedule.getId()==null || "".equals(schedule.getId())){

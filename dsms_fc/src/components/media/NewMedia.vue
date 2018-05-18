@@ -39,37 +39,18 @@
             <el-form-item label="height" prop="height">
               <el-input type="number" v-model.number="media.height"></el-input>
             </el-form-item>
-            <el-form-item label="type" prop="_type">
-                <el-radio-group v-model="media._type" >
-                    <el-radio label="static">静态</el-radio>
-                    <el-radio label="dynamic">动态</el-radio>
-                </el-radio-group>
+            <el-form-item label="滚动方式" prop="_type">
+              <el-radio-group v-model="media._type">
+                <el-radio label="row">横向</el-radio>
+                <el-radio label="col">纵向</el-radio>
+              </el-radio-group>
             </el-form-item>
-            <div v-if="media._type === 'static'">
-                <el-form-item label="滚动方式" prop="_type">
-                    <el-radio-group v-model="media.ctype">
-                        <el-radio label="row">横向</el-radio>
-                        <el-radio label="col">纵向</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="字体大小">
-                    <el-input type="number" v-model.number="media.etcData"></el-input>
-                </el-form-item>
-              <el-form-item label="内容" prop="url">
-                <el-input type="textarea" rows="5" v-model="media.url"></el-input>
-              </el-form-item>
-            </div>
-            <div v-if="media._type === 'dynamic'">
-              <el-form-item label="请求路径" prop="url">
-                <el-input v-model="media.url" placeholder="https://example.org/data"></el-input>
-              </el-form-item>
-              <el-form-item label="返回数据格式" prop="url">
-                <el-input v-model="media.imageUrl" placeholder="example: data.user.name"></el-input>
-              </el-form-item>
-              <el-form-item label="字体大小">
-                <el-input type="number" v-model.number="media.etcData"></el-input>
-              </el-form-item>
-            </div>
+            <el-form-item label="字体大小">
+              <el-input type="number" v-model.number="media.etcData"></el-input>
+            </el-form-item>
+            <el-form-item label="内容" prop="url">
+              <el-input type="textarea" rows="5" v-model="media.url"></el-input>
+            </el-form-item>
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="group" name="group">
@@ -121,7 +102,7 @@
                 })
             };
             const groupRule = (rule, value, callback) => {
-                if (value.length === 0)
+                if (value.length < 2)
                     callback(new Error("请添加素材"));
                 else callback();
             };
@@ -151,7 +132,6 @@
                     height: 0,
                     type: '',
                     _type: '',
-                    ctype: '',
                     etcData: 0,
                     group: [],
                     url: '',

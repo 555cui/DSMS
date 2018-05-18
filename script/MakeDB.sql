@@ -1,3 +1,4 @@
+create database DSMS;
 use DSMS;
 create table table_group(
     id nvarchar(36) primary key,
@@ -64,7 +65,7 @@ create table table_media(
     width int not null,
     height int not null,
     etcData int not null DEFAULT 0,
-    url nvarchar(128) unique,
+    url nvarchar(400),
     imageUrl nvarchar(128),
     unique(userId, name),
     foreign key(userId) references table_user(id) ON DELETE CASCADE,

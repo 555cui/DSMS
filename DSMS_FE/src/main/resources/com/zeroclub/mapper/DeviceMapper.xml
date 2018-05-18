@@ -104,6 +104,9 @@
             <if test="address!=null and address!=''">
                 address = #{address},
             </if>
+            <if test="mac!=null and mac!=''">
+                mac = #{mac},
+            </if>
             <if test="group!=null">
                 <if test="group.id!=null and group.id!=''">
                     groupId = #{group.id},

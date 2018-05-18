@@ -9,4 +9,5 @@ public interface ScheduleService {
     Schedule save(Schedule schedule);
     void delete(Schedule schedule);
     List<Schedule> getList(Schedule schedule);
+    void deleteList(String[] ids);
 }

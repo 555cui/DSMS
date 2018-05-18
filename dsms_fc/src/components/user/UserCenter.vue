@@ -1,5 +1,6 @@
 <template>
     <div>
+        <device-edit :device="selectDevice" :show="deviceEditShow" @edit="onEditDevice" @close="deviceEditShow=false"></device-edit>
         <el-container class="no-box">
             <el-header height="80px" class="no-box">
                 <div id="header-box">
@@ -112,9 +113,11 @@
 </template>
 
 <script>
+    import DeviceEdit from "../device/DeviceEdit";
     export default {
         name: "user-center",
-        computed: {
+      components: {DeviceEdit},
+      computed: {
             defaultCenterAction(){
                 return this.$store.state.user.centerAction;
             }
@@ -200,26 +203,27 @@
                 },
                 deviceSelection: [],
                 groupSelectionIndex: 0,
-                deviceInfo: {
-                    id: '',
-                    name: '',
-                    width: 0,
-                    height: 0,
-                    mac: '',
-                    address: '',
-                    state: '',
-                    ip: '',
-                },
+              selectDevice: {
+                id: '',
+                name: '',
+                width: '',
+                height: '',
+                mac: '',
+                address: '',
+                group: {},
+                state: '',
+              },
+              deviceEditShow: false,
             }
         },
         methods: {
-            onSelectMenu(key, keyPath){
-                this.centerAction=key;
-            },
-            handleReturn(){
-                window.history.go(-1);
-            },
-            onUpdateUser(){
+          onSelectMenu(key, keyPath){
+            this.centerAction=key;
+          },
+          handleReturn(){
+            window.history.go(-1);
+          },
+          onUpdateUser(){
                 const url = '/DSMS_FE/user/';
                 const userData = {
                     name: this.userFormData.name,
@@ -240,7 +244,7 @@
                     }
                 )
             },
-            handleTabsEdit(targetName, action) {
+          handleTabsEdit(targetName, action) {
                 if (action === 'add') {
                     this.$prompt('请输入分组名', 'tips', {
                         confirmButtonText: '新建',
@@ -310,15 +314,15 @@
                     });
                 }
             },
-            toTabClick(tab){
+          toTabClick(tab){
                 this.deviceSelection = [];
                 this.groupSelectionIndex = this.group.findIndex(item=>item.name === tab.name);
             },
-            handleEdit(row){
-                this.$store.state.device.show=true;
-                this.deviceInfo = row;
+          handleEdit(row){
+              this.selectDevice = row;
+              this.deviceEditShow = true;
             },
-            handleDelete(row){
+          handleDelete(row){
                 this.$confirm('你确定删除该设备?', 'tips', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -344,9 +348,15 @@
                     })
                 });
             },
-            handleSelectionChange(val){
+          handleSelectionChange(val){
                 this.deviceSelection = val;
-            }
+            },
+          onEditDevice(device){
+            const index = this.group[this.groupSelectionIndex].device.findIndex(item=>item.id===device.id);
+            this.group[this.groupSelectionIndex].device.splice(index, 1);
+            const index2 = this.group.findIndex(item=>item.id===device.group.id);
+            this.group[index2].device.push(device);
+          },
         }
     }
 </script>

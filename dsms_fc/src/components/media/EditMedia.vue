@@ -108,7 +108,6 @@
                 this.mediaForm.height=height;
             },
             onUpdateMedia(){
-                console.info('update:'+this.mediaForm.id);
                 this.$refs['mediaF'].validate(valid => {
                     if (valid){
                         const url = '/DSMS_FE/media/'+this.mediaForm.id;
@@ -138,8 +137,20 @@
                 });
             },
             handleClose(){
-                this.$refs['mediaF'].resetFields();
-                this.$store.state.media.showEdit = false;
+              this.mediaForm = {
+                id: '',
+                name: '',
+                type: '',
+                _type: '',
+                width: 0,
+                height: 0,
+                etcData: 0,
+                group: [],
+                url: '',
+                imageUrl: '',
+              };
+              this.$refs['mediaF'].resetFields();
+              this.$store.state.media.showEdit = false;
             },
             onOpen(){
                 this.mediaForm.group=[];
@@ -155,7 +166,6 @@
                 this.mediaForm.url=this.media.url;
                 this.mediaForm.imageUrl=this.media.imageUrl;
                 this.list = this.mediaList[this.media._type];
-                console.info('open:'+this.mediaForm.id);
             }
         },
         data(){

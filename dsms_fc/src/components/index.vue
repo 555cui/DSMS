@@ -2,7 +2,7 @@
     <div>
       <login-page></login-page>
         <logout-page></logout-page>
-      <el-container class="no-box">
+        <el-container class="no-box">
         <el-header class="no-box" height="80px">
             <div id="header-box">
                 <div id="menu-box"><el-menu :default-active="$route.path"
@@ -13,7 +13,8 @@
                     <el-menu-item index="/first">首页</el-menu-item>
                     <el-menu-item index="/schedule">日程</el-menu-item>
                     <el-menu-item index="/template">模板</el-menu-item>
-                    <el-menu-item index="/media">媒体</el-menu-item>
+                    <el-menu-item index="/media">素材</el-menu-item>
+                    <el-menu-item index="/device">设备</el-menu-item>
                 </el-menu></div>
                 <div id="text-box"><h1>DSMS</h1></div>
                 <div id="button-box">
@@ -97,7 +98,7 @@
 
     #menu-box{
         margin: 10px;
-        width: 300px;
+        width: 350px;
     }
     #button-box{
         padding: 20px 10px;

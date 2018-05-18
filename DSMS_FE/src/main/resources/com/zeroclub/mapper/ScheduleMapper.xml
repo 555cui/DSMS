@@ -25,8 +25,8 @@
         select * from table_schedule
         where id = #{id}
     </select>
-    <select id="getList" resultMap="simpleSchedule">
-        select id from table_schedule
+    <select id="getList" resultMap="schedule">
+        select * from table_schedule
         where 1=1
         <if test="device!=null">
             and (0=1
@@ -38,13 +38,17 @@
             </if>
             )
         </if>
-        and
-        (
+        <if test="startDate!=null and endDate!=null">
+            and
+            (
             (#{startDate} &lt;= startDate and #{endDate} &gt;= endDate) or
             (#{startDate} &gt;= startDate and #{startDate} &lt;= endDate) or
             (#{endDate} &gt;= startDate and #{endDate} &lt;= endDate)
-        )
-        and (week &amp; #{week}) &gt; 0
+            )
+        </if>
+        <if test="week!=null and week!=0">
+            and (week &amp; #{week}) &gt; 0
+        </if>
         <if test="program!=null">
             <foreach collection="program" item="item">
                 and id in (
@@ -54,6 +58,9 @@
                     (#{item.endTime} &gt;= startTime and #{item.endTime} &lt;= endTime)
                 )
             </foreach>
+        </if>
+        <if test="user!=null">
+            and userId = #{user.id}
         </if>
     </select>
     <insert id="insert">
@@ -65,7 +72,7 @@
         where id=#{id}
         <if test="user!=null">
             <if test="user.id!=null and user.id!=''">
-                userId = #{userId}
+                and userId = #{user.id}
             </if>
         </if>
     </delete>
@@ -92,4 +99,11 @@
             </if>
         </if>
     </update>
+    <delete id="deleteList">
+        delete from table_schedule
+        where id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

@@ -53,7 +53,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="4">
-                        state
+                        状态
                     </el-col>
                     <el-col :span="20">{{deviceState.type}}</el-col>
                 </el-row>
@@ -95,7 +95,7 @@
             this.$ajax.get(url).then(response=>{
                 if (response.data.code===0){
                     this.group=response.data.data;
-                    this.device=this.group[0].device[0];
+                    //this.device=this.group[0].device[0];
                     this.reflashPrograms();
                 }
                 else if (response.data.code>=10&&response.data.code<20){
@@ -115,8 +115,27 @@
         beforeDestroy(){
             clearInterval(this.intervalId);
         },
+      watch: {
+        login(){
+          if (this.login){
+            const url = '/DSMS_FE/deviceGroup/';
+            this.$ajax.get(url).then(response=>{
+              if (response.data.code===0){
+                this.group=response.data.data;
+                //this.device=this.group[0].device[0];
+                this.reflashPrograms();
+              }
+              else if (response.data.code>=10&&response.data.code<20){
+                this.$store.state.user.code=response.data.code;
+                console.info('set code'+this.$store.state.user.code);
+              }
+              else this.$message.error('获取数据出错');
+            }).catch(e=>{this.$message.error('服务器出错')});
+          }
+        }
+      },
         computed: {
-            program(){
+          program(){
                 const p = [];
                 for (let i=0;i<24;i++){
                     if (i<10)i='0'+i;
@@ -134,7 +153,10 @@
                     }
                 }
                 return p;
-            }
+            },
+          login(){
+            return this.$store.state.user.login;
+          },
         },
         data(){
             const d = new Date();
@@ -143,7 +165,7 @@
                 schedule: {},
                 selectDate:d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate())+' 00:00:00',
                 device: {
-                    id: '',
+                    id: null,
                     mac: '',
                     name: '',
                     address: '',
@@ -177,8 +199,7 @@
                 }).catch(e=>{this.$message.error('服务器出错')});
             },
             toDeviceManager(){
-                this.$store.state.user.centerAction='device';
-                this.$router.push('userCenter');
+                this.$router.push('/device');
             },
             setSchedule(schedule){
                 this.schedule=schedule;
@@ -198,7 +219,7 @@
                 this.reflashPrograms();
             },
             getState(callback){
-                if (this.device.id!=null){
+                if (this.device.id!==null){
                     const url = '/DSMS_FE/device/'+this.device.id+'/state';
                     this.$ajax.get(url).then(response=>{
                         if (response.data.code===0){

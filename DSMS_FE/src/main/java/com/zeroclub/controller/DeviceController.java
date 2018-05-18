@@ -1,6 +1,7 @@
 package com.zeroclub.controller;
 
 import com.zeroclub.entity.Device;
+import com.zeroclub.entity.DeviceGroup;
 import com.zeroclub.entity.DeviceState;
 import com.zeroclub.entity.User;
 import com.zeroclub.service.CashService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -131,6 +133,17 @@ public class DeviceController {
             return ReturnMap.getFalieReturn(41, "设备名已存在");
         return ReturnMap.getSuccessReturn("设备名可以使用");
     }
+    @RequestMapping(value = "/mac", method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkMac(@RequestBody Device device,
+                        @CookieValue(value = "dsms_token", required = false)String token){
+        User user = (User)cashService.get(token);
+        if (user == null)
+            return ReturnMap.getFalieReturn(10, "你已经登出");
+        if (deviceService.getOne(device)!=null)
+            return ReturnMap.getFalieReturn(42, "mac已存在");
+        return ReturnMap.getSuccessReturn("mac可以使用");
+    }
 
     @RequestMapping(value = "/state", method = RequestMethod.POST)
     @ResponseBody
@@ -141,6 +154,34 @@ public class DeviceController {
         }
         cashService.set(deviceState.getDevice().getId(), deviceState, 5);
         return ReturnMap.getSuccessReturn("success update");
+    }
+
+    @RequestMapping(value = "/state/group/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Map getStateList(
+            @PathVariable String id,
+            @CookieValue(value = "dsms_token", required = false)String token){
+        User user = (User)cashService.get(token);
+        if (user == null)
+            return ReturnMap.getFalieReturn(10, "你已经登出");
+        List<DeviceState> list = new ArrayList<DeviceState>();
+        Device device = new Device();
+        DeviceGroup deviceGroup = new DeviceGroup();
+        deviceGroup.setId(id);
+        device.setUser(user);
+        device.setGroup(deviceGroup);
+        List<Device> devices = deviceService.getList(device);
+        for (Device d: devices){
+            DeviceState deviceState = (DeviceState)cashService.read(d.getId());
+            if (deviceState == null){
+                deviceState = new DeviceState();
+                deviceState.setDevice(d);
+                deviceState.setType("offline");
+            }
+            deviceState.setUrl("");
+            list.add(deviceState);
+        }
+        return ReturnMap.getSuccessReturn(list);
     }
 
     @RequestMapping(value = "/{id}/state", method = RequestMethod.GET)

@@ -38,6 +38,9 @@
         <property name="minIdle" value="${jdbc.minIdle}" />
         <!-- 获取连接最大等待时间 -->
         <property name="maxWait" value="${jdbc.maxWait}" />
+        <!-- 维持连接 -->
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="testOnBorrow" value="true"/>
     </bean>
 
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
