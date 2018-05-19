@@ -31,7 +31,7 @@
                     <el-form-item label="type">
                         <el-input v-model="mediaForm._type" disabled></el-input>
                     </el-form-item>
-                    <el-form-item label="播放间隔" prop="etcData">
+                    <el-form-item label="播放间隔(ms)" prop="etcData">
                         <el-input type="number" v-model.number="mediaForm.etcData"></el-input>
                     </el-form-item>
                     <el-form-item label="media" prop="group">
@@ -52,18 +52,6 @@
                     <el-form-item label="height" prop="height">
                         <el-input type="number" v-model="mediaForm.height"></el-input>
                     </el-form-item>
-                    <div v-if="mediaForm._type === 'dynamic'">
-                        <el-form-item label="刷新速度" prop="etcData">
-                            <el-input type="number" v-model.number="mediaForm.etcData"></el-input>
-                        </el-form-item>
-                        <el-form-item label="请求地址" prop="url">
-                            <el-input v-model="mediaForm.url"></el-input>
-                        </el-form-item>
-                        <el-form-item label="数据结构" prop="imageUrl">
-                            <el-input v-model="mediaForm.imageUrl"></el-input>
-                        </el-form-item>
-                    </div>
-                    <div v-else>
                         <el-form-item label="字体大小" prop="etcData">
                             <el-input type="number" v-model.number="mediaForm.etcData"></el-input>
                         </el-form-item>
@@ -77,7 +65,6 @@
                             <el-input type="textarea" rows="5" v-model="mediaForm.url"></el-input>
                         </el-form-item>
                     </div>
-                </div>
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="$store.state.media.showEdit = false">取 消</el-button>
@@ -195,15 +182,9 @@
                 else callback(new Error("请输入大于零的数"))
             };
             const etcRule = (rule, value, callback) => {
-                if (value>0)
-                    if (this.mediaForm._type === 'dynamic')
-                        callback();
-                    else {
-                        if (value > this.mediaForm.height)
-                            callback(new Error("字体大小不能超过高度"));
-                        else callback();
-                    }
-                else callback(new Error("请输入大于零的数"));
+                if (value>1000)
+                  callback();
+                else callback(new Error("时间间隔至少为1000ms"));
             };
             return{
                 list: [],

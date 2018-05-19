@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :visible.sync="show" top="50px" title="新建媒体" :before-close="onCancel" @open="flag=true">
+    <el-dialog :visible.sync="show" top="50px" title="新建素材" :before-close="onCancel" @open="flag=true">
       <el-tabs v-model="$store.state.media.action" type="card" @tab-click="cleanAllForm">
         <el-tab-pane label="video" name="video">
           <el-upload
