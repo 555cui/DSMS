@@ -153,19 +153,21 @@
               this.$store.state.media.showEdit = false;
             },
             onOpen(){
-                this.mediaForm.group=[];
+              this.mediaForm.group=[];
+              if(this.media.type === 'group'){
                 for (const item of this.media.group)
-                    this.mediaForm.group.push(item.id);
-                this.mediaForm.id=this.media.id;
-                this.mediaForm.name=this.media.name;
-                this.mediaForm.type=this.media.type;
-                this.mediaForm._type=this.media._type;
-                this.mediaForm.width=this.media.width;
-                this.mediaForm.height=this.media.height;
-                this.mediaForm.etcData=this.media.etcData;
-                this.mediaForm.url=this.media.url;
-                this.mediaForm.imageUrl=this.media.imageUrl;
-                this.list = this.mediaList[this.media._type];
+                  this.mediaForm.group.push(item.id);
+              }
+              this.mediaForm.id=this.media.id;
+              this.mediaForm.name=this.media.name;
+              this.mediaForm.type=this.media.type;
+              this.mediaForm._type=this.media._type;
+              this.mediaForm.width=this.media.width;
+              this.mediaForm.height=this.media.height;
+              this.mediaForm.etcData=this.media.etcData;
+              this.mediaForm.url=this.media.url;
+              this.mediaForm.imageUrl=this.media.imageUrl;
+              this.list = this.mediaList[this.media._type];
             }
         },
         data(){
