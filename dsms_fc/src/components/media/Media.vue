@@ -166,7 +166,7 @@
                                 });
                             } else if (response.data.code >=10 && response.data.code<20)
                                 this.$store.state.user.code=response.data.code;
-                        });
+                        }).catch(()=>{this.$message.error('素材被引用，无法删除！')});
                     }).catch(() => {
                         this.$message({
                             type: 'info',
