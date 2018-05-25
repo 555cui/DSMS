@@ -10,6 +10,6 @@
 mvn run tomcat
 
 # build for production with minification
-mvn build
+mvn clean install
 
 ```
