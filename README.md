@@ -12,8 +12,11 @@
 sudo apt-get install nginx
 
 # install mysql
-sudo apt-get install mysql
+sudo apt-get install mysql-server
 root password:toor
+
+# install redis
+sudo apt-get install redis-server
 
 # install maven
 
