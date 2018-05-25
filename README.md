@@ -17,6 +17,7 @@ root password:toor
 
 # install redis
 sudo apt-get install redis-server
+修改密码为abc123
 
 # install maven
 
@@ -35,7 +36,10 @@ sudo apt install ffmpeg
 cd DSMS_FC
 npm install
 npm run build
+sudo cp ../script/dsms.production.conf /etc/nginx/conf.d/dsms.conf
+sudo service nginx reload
 
 # 后端
 cd DSMS_FE
 mvn clean install
+%TOMCAT_HOME%/bin/startup.sh
